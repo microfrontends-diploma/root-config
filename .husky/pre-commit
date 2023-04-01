@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+node ./custom_hooks/pre-commit.js "$(pwd)"
+
+yarn exec pretty-quick --staged 
+# && yarn exec concurrently yarn:test yarn:lint

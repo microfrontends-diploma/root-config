@@ -1,0 +1,13 @@
+/**
+	This file was created automatically
+	It has all externals libraries
+	Before committing the changes make sure you've pasted correct cdn link for each library respectively 
+*/
+[
+  {
+    "lib": "single-spa",
+    "url": "https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js",
+    "action": "added"
+  }
+]
+/** Generated timestamp: 1680333430600 */

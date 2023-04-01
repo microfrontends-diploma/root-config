@@ -1,0 +1,9 @@
+{
+  "extends": "ts-config-single-spa",
+  "compilerOptions": {
+    "declarationDir": "dist"
+  },
+  "typeRoots": ["src/typings", "node_modules/@types"],
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test*"]
+}
