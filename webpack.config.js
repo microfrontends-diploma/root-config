@@ -4,7 +4,6 @@ const singleSpaDefaults = require("webpack-config-single-spa-ts");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const dotenv = require('dotenv');
 
-
 module.exports = (webpackConfigEnv, argv) => {
   dotenv.config();
   const importMapUrl = process.env.IMPORT_MAP_URL;
@@ -37,7 +36,12 @@ module.exports = (webpackConfigEnv, argv) => {
         publicPath: './',
         scriptLoading: 'blocking',
         templateParameters: {
+          title: 'Микрофронтенды',
           isLocal: webpackConfigEnv && webpackConfigEnv.isLocal,
+          // Три нижеидущих массива предназначены для регулировки Content Security Policy - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+          scriptTrustedDomains: ['https:', 'localhost:*', 'http://94.250.250.29:*'],
+          styleSheetTrustedDomains: ['https:', 'localhost:*', 'http://94.250.250.29:*'],
+          connectionTrustedDomains: ['https:', 'localhost:*', 'http://94.250.250.29:*', 'ws://localhost:*'],
           importMapUrl: `${importMapUrl}${env}`,
           orgName,
         },

@@ -1,0 +1,67 @@
+name: root-config-CI
+on:
+  push:
+    branches: ["dev"]
+  pull_request:
+    branches: ["dev"]
+
+env:
+  CONTAINER_TAG: root-config
+  FILE_NAME: root-config.cid
+
+jobs:
+  build:
+    name: build
+    runs-on: [self-hosted, linux, X64]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+
+      - name: Run linter
+        id: lint
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: lint
+        continue-on-error: true
+
+      - name: Run formatter
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: format
+
+      - name: reading running container id
+        id: container-id
+        run: |
+          FILE="$HOME/docker-containers-id/$FILE_NAME"
+          if [ -f "$FILE" ]; then
+            ID=`cat $FILE`
+            echo "id=$ID" >> $GITHUB_OUTPUT
+          fi
+
+      - name: stopping container, deleting file
+        run: |
+          FILE="$HOME/docker-containers-id/$FILE_NAME"
+          if [ ! -z "${{steps.container-id.outputs.id}}" ]; then
+            rm $FILE
+            docker stop ${{steps.container-id.outputs.id}}
+          fi
+
+      - name: remove previous docker image
+        run: docker rmi -f $CONTAINER_TAG
+
+      - name: build docker image
+        run: docker build . -t $CONTAINER_TAG
+
+      - name: run docker container and save id
+        run: |
+          FILE="$HOME/docker-containers-id/$FILE_NAME"
+          docker run --cidfile $FILE -d -p 9000:9000 $CONTAINER_TAG

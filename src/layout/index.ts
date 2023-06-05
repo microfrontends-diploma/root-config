@@ -1,9 +1,5 @@
 import { registerApplication, start } from "single-spa";
-import {
-  constructRoutes,
-  constructApplications,
-  constructLayoutEngine,
-} from "single-spa-layout";
+import { constructRoutes, constructApplications, constructLayoutEngine } from "single-spa-layout";
 import { ContainerEl } from "single-spa-layout/dist/types/isomorphic/constructRoutes";
 import { MFInterface } from "./types";
 

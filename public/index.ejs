@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Root Config</title>
+    <title><%= title %></title>
 
     <!--
     Remove this if you only support browsers that support async/await.
@@ -19,7 +19,7 @@
   -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self' https: localhost:*; script-src 'unsafe-inline' 'unsafe-eval' https: localhost:*; connect-src https: localhost:* ws://localhost:*; style-src 'unsafe-inline' https:; object-src 'none';"
+      content="default-src 'self' https: localhost:*; script-src 'unsafe-inline' 'unsafe-eval' <%= scriptTrustedDomains.join(' ') %>; connect-src <%= connectionTrustedDomains.join(' ') %>; style-src 'unsafe-inline' <%= styleSheetTrustedDomains.join(' ') %>; object-src 'none';"
     />
     <meta name="importmap-type" content="systemjs-importmap" />
     <!-- If you wish to turn off import-map-overrides for specific environments (prod), uncomment the line below -->
@@ -34,31 +34,41 @@
 
     More information about shared dependencies can be found at https://single-spa.js.org/docs/recommended-setup#sharing-with-import-maps.
   -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js" as="script" />
+
+    <script type="systemjs-importmap">
+      {
+        "imports": {
+          "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js",
+          "@microfrontends-diploma/shared-code": "http://94.250.250.29:8080/1.0.0/umd/index.js"
+        }
+      }
+    </script>
+    <script type="systemjs-importmap" src="<%= importMapUrl %>"></script>
+
+    <% if (isLocal) { %>
     <!-- TODO: скорее всего это можно будет вынести во внешнюю карту импорта -->
     <script type="systemjs-importmap">
       {
         "imports": {
-          "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js"
+          "react": "https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.development.min.js",
+          "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.development.min.js",
+          "@navbar-mf": "http://localhost:8500/andy-inc-navbar-mf.js",
+          "@home-mf": "http://localhost:8503/andy-inc-initial-page-mf.js",
+          "@settings-mf": "http://localhost:8504/andy-inc-settings-mf.js"
         }
       }
     </script>
-    <link
-      rel="preload"
-      href="https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js"
-      as="script"
-    />
-
-    <!-- Add your organization's prod import map URL to this script's src  -->
-    <!-- <script type="systemjs-importmap" src="<%= importMapUrl %>"></script> -->
-
-    <!-- TODO: это еще надо будет поправить -->
-    <% if (isLocal) { %>
+    <% } else { %>
+    <!-- TODO: скорее всего это можно будет вынести во внешнюю карту импорта -->
     <script type="systemjs-importmap">
       {
         "imports": {
-          "@navbar": "http://localhost:8500/andy-inc-navbar-mf.js",
           "react": "https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js",
           "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"
+          "@navbar-mf": "http://94.250.250.29:8500/andy-inc-navbar-mf.js",
+          "@home-mf": "http://94.250.250.29:8503/andy-inc-initial-page-mf.js",
+          "@settings-mf": "http://94.250.250.29:8504/andy-inc-settings-mf.js",
         }
       }
     </script>
@@ -78,40 +88,13 @@
     <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/system.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/extras/amd.min.js"></script>
     <% } %>
-
-    <style>
-      html {
-        height: 100%;
-        width: 100%;
-      }
-
-      body {
-        display: flex;
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-      }
-
-      #navigation {
-        width: 20%;
-        min-width: 150px;
-        padding: 20px;
-      }
-
-      #content {
-        width: 80%;
-        padding: 20px;
-      }
-    </style>
   </head>
   <body>
-    <noscript> You need to enable JavaScript to run this app. </noscript>
+    <!-- <noscript> You need to enable JavaScript to run this app. </noscript> -->
     <div id="navigation"></div>
     <div id="content"></div>
-    <import-map-overrides-full
-      show-when-local-storage="devtools"
-      dev-libs
-    ></import-map-overrides-full>
+    <% if (isLocal) { %>
+    <import-map-overrides-full show-when-local-storage="devtools" dev-libs></import-map-overrides-full>
+    <% } %>
   </body>
 </html>

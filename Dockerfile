@@ -1,4 +1,4 @@
-FROM node:16.20-alpine3.16
+FROM node:16.20-alpine3.16 as builder
 
 WORKDIR /app
 
@@ -8,6 +8,14 @@ RUN yarn install
 
 COPY . .
 
-EXPOSE 9000
+RUN yarn build
 
-CMD ["yarn", "start"]
+FROM nginx:alpine
+
+COPY ./nginx.conf /etc/nginx/nginx.conf
+
+RUN rm -rf /usr/share/nginx/html/*
+
+COPY --from=builder /app/dist /usr/share/nginx/html/
+
+EXPOSE 9000
