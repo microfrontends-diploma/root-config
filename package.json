@@ -10,9 +10,7 @@
     "format": "prettier --write .",
     "check-format": "prettier --check .",
     "prepare": "husky install",
-    "build": "concurrently yarn:build:*",
-    "build:webpack": "webpack --mode=production",
-    "build:types": "tsc",
+    "build": "webpack --mode=production",
     "generate:externals": "node ./custom_hooks/pre-add.js \"$(pwd)\""
   },
   "author": "",
@@ -54,6 +52,5 @@
     "events": "^3.3.0",
     "single-spa": "^5.9.3",
     "single-spa-layout": "^1.6.0"
-  },
-  "types": "dist/andy-inc-root-config.d.ts"
+  }
 }
