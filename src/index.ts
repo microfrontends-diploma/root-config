@@ -1,12 +1,11 @@
 import { MFInterface } from "./layout/types";
 import EventEmitter from "events";
-import { SingleSpaCustomEventDetail, getAppStatus, getMountedApps } from "single-spa";
+import { SingleSpaCustomEventDetail, getAppStatus } from "single-spa";
 import { buildAppLayout } from "./layout";
 import "./styles/index.css";
 import { ContainerEl } from "single-spa-layout/dist/types/isomorphic/constructRoutes";
 import apiInstance from "./api";
 
-// TODO: кастомный ивент эмиттер
 const eventEmitter = new EventEmitter();
 
 const initialMicrofrontends: Array<{

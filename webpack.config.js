@@ -3,6 +3,7 @@ const { merge } = require("webpack-merge");
 const singleSpaDefaults = require("webpack-config-single-spa-ts");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const dotenv = require('dotenv');
+const webpack = require('webpack');
 
 module.exports = (webpackConfigEnv, argv) => {
   dotenv.config();
@@ -46,6 +47,9 @@ module.exports = (webpackConfigEnv, argv) => {
           orgName,
         },
       }),
+      new webpack.DefinePlugin({
+        API_URL: isLocal ? JSON.stringify('http://localhost') : JSON.stringify('http://94.250.250.29')
+      })
     ],
     devServer: {
       historyApiFallback: true

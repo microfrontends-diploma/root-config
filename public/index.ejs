@@ -36,6 +36,7 @@
   -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js" as="script" />
 
+    <script type="systemjs-importmap" src="<%= importMapUrl %>"></script>
     <script type="systemjs-importmap">
       {
         "imports": {
@@ -44,10 +45,8 @@
         }
       }
     </script>
-    <script type="systemjs-importmap" src="<%= importMapUrl %>"></script>
 
     <% if (isLocal) { %>
-    <!-- TODO: скорее всего это можно будет вынести во внешнюю карту импорта -->
     <script type="systemjs-importmap">
       {
         "imports": {
